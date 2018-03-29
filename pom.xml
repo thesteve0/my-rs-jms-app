@@ -97,7 +97,8 @@
             <scope>provided</scope>
         </dependency>
 
-    <!-- Import the JMS API, we use provided scope as the API is included in WildFly -->
+    <!-- Import the JMS API
+     -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-client</artifactId>
