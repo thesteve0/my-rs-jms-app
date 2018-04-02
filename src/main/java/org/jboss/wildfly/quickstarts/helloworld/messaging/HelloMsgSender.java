@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 @RequestScoped
 public class HelloMsgSender {
-
+   /*
     @Inject
     // Create a Connection
     Connection connection = connectionFactory.createConnection();
@@ -22,4 +22,5 @@ public class HelloMsgSender {
 
     // Start the connection
     connection.start();
+    */
 }
