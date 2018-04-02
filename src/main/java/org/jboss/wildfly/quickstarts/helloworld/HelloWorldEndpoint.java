@@ -51,13 +51,14 @@ public class HelloWorldEndpoint {
             Session session  = msgConnection.getSession();
             Connection connection = msgConnection.getConnection();
 
+            //Start the connection
+            connection.start();
+
             // Create the destination
             Destination destination = session.createTopic("NOTES");
 
             // Create a MessageProducer from the Session to the Queue
             MessageProducer producer = session.createProducer(destination);
-            connection.start();
-            //Start the connection
 
             TextMessage message = session.createTextMessage("my messasge");
             producer.send(message);
@@ -73,10 +74,10 @@ public class HelloWorldEndpoint {
         try {
             Session session = msgConnection.getSession();
             Connection connection = msgConnection.getConnection();
-
+            connection.start();
             Destination destination = session.createTopic("NOTES");
             MessageConsumer consumer = session.createConsumer(destination);
-            connection.start();
+
             TextMessage message = (TextMessage) consumer.receive();
             msgResult = message.getText();
             connection.stop();
