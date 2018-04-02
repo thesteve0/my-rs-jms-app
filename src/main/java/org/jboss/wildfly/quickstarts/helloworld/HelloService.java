@@ -16,12 +16,15 @@
  */
 package org.jboss.wildfly.quickstarts.helloworld;
 
+import javax.enterprise.context.ApplicationScoped;
+
 /**
  * A simple CDI service which is able to say hello to someone
  *
  * @author Pete Muir
  *
  */
+@ApplicationScoped
 public class HelloService {
 
     String createHelloMessage(String name) {

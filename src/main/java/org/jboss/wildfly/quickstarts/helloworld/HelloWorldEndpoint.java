@@ -38,6 +38,8 @@ public class HelloWorldEndpoint {
     
     @Inject
     HelloService helloService;
+
+    @Inject
     MsgConnection msgConnection;
 
     @GET
