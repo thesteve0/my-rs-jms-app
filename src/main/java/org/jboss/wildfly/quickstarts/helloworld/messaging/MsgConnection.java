@@ -4,10 +4,12 @@ package org.jboss.wildfly.quickstarts.helloworld.messaging;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Session;
+import javax.ws.rs.POST;
 
 
 /*
@@ -31,9 +33,7 @@ TODO then hook it up to the JAX-RS server
 @ApplicationScoped
 public class MsgConnection {
     private ActiveMQConnectionFactory connectionFactory = null;
-    private String uri = System.getenv("BROKER_AMQ_TCP_PORT");
-    private String username = System.getenv("AMQ_USER");
-    private String password = System.getenv("AMQ_PASSWORD");
+
     private Session session = null;
 
 
@@ -44,13 +44,18 @@ public class MsgConnection {
     }
     */
 
+    public MsgConnection(){
+        super();
+    }
 
-
-    public MsgConnection() {
-
+    @PostConstruct
+    public void afterCreate() {
+        String uri = System.getenv("BROKER_AMQ_TCP_PORT");
+        String username = System.getenv("AMQ_USER");
+        String password = System.getenv("AMQ_PASSWORD");
         try {
             // Create a ConnectionFactory
-            connectionFactory = new ActiveMQConnectionFactory(uri);
+            connectionFactory = new ActiveMQConnectionFactory(username, password, uri);
             // Create a Connection
             Connection connection = connectionFactory.createConnection();
             // Create a Session
