@@ -51,9 +51,6 @@ public class HelloWorldEndpoint {
             Session session  = msgConnection.getSession();
             Connection connection = msgConnection.getConnection();
 
-            //Start the connection
-            connection.start();
-
             // Create the destination
             Destination destination = session.createTopic("NOTES");
 
