@@ -56,6 +56,7 @@ public class HelloWorldEndpoint {
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage("my messasge");
             producer.send(message);
+            System.out.println("Sent the message");
 
 
         } catch (JMSException e) {
