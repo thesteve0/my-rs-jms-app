@@ -49,11 +49,16 @@ public class HelloWorldEndpoint {
         String msgResult = "";
         try {
             Session session  = msgConnection.getSession();
+            Connection connection = msgConnection.getConnection();
+
             // Create the destination
             Destination destination = session.createTopic("NOTES");
 
             // Create a MessageProducer from the Session to the Queue
             MessageProducer producer = session.createProducer(destination);
+            connection.start();
+            //Start the connection
+
             TextMessage message = session.createTextMessage("my messasge");
             producer.send(message);
             System.out.println("Sent the message");
@@ -66,8 +71,11 @@ public class HelloWorldEndpoint {
 
         try {
             Session session = msgConnection.getSession();
+            Connection connection = msgConnection.getConnection();
+
             Destination destination = session.createTopic("NOTES");
             MessageConsumer consumer = session.createConsumer(destination);
+            connection.start();
             TextMessage message = (TextMessage) consumer.receive();
             msgResult = message.getText();
             //TODO need to understand session open and closing dynamics

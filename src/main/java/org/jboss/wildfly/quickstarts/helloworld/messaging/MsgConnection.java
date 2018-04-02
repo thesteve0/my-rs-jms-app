@@ -35,6 +35,7 @@ public class MsgConnection {
     private ActiveMQConnectionFactory connectionFactory = null;
 
     private Session session = null;
+    private Connection connection = null;
 
 
     /* seems like singleton's don't inject this way
@@ -57,7 +58,7 @@ public class MsgConnection {
             // Create a ConnectionFactory
             connectionFactory = new ActiveMQConnectionFactory(username, password, uri);
             // Create a Connection
-            Connection connection = connectionFactory.createConnection();
+            connection = connectionFactory.createConnection();
             // Create a Session
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
@@ -79,7 +80,8 @@ public class MsgConnection {
           return this.session;
     }
 
-
-
+    public Connection getConnection() {
+        return connection;
+    }
 }
 
