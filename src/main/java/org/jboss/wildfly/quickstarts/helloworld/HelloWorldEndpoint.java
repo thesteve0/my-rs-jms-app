@@ -61,6 +61,7 @@ public class HelloWorldEndpoint {
 
             TextMessage message = session.createTextMessage("my messasge");
             producer.send(message);
+            connection.stop();
             System.out.println("Sent the message");
 
 
@@ -78,6 +79,7 @@ public class HelloWorldEndpoint {
             connection.start();
             TextMessage message = (TextMessage) consumer.receive();
             msgResult = message.getText();
+            connection.stop();
             //TODO need to understand session open and closing dynamics
             session.close();
         } catch (JMSException e){
