@@ -21,7 +21,6 @@ Username and password
 /*
 Topics are for pub/sub, queues are for point to point
 
-TODO I really think this class should be a singleton so make a method for getInstanceOf and then also make the constructor private
 TODO make sure we get maven to import the clients we need
 TODO make sure we get this as the right class to inject
 TODO then create a message and send to the topic - make sure we do pub sub
@@ -35,9 +34,15 @@ public class MsgConnection {
     private String uri = System.getenv("BROKER_AMQ_TCP_PORT");
     private String username = System.getenv("AMQ_USER");
     private String password = System.getenv("AMQ_PASSWORD");
+    private Session session = null;
+
+    public MsgConnection getInstance() {
+        return this;
+    }
 
 
-    public MsgConnection() {
+
+    private MsgConnection() {
 
         try {
             // Create a ConnectionFactory
@@ -45,11 +50,11 @@ public class MsgConnection {
             // Create a Connection
             Connection connection = connectionFactory.createConnection();
             // Create a Session
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
         } catch (JMSException e) {
             e.printStackTrace();
         }
-
         /*
         TODO according to this page - http://activemq.apache.org/how-do-i-use-jms-efficiently.html I should resuse message
         producers and consumers. How do I do that effectively here. Do I make a Map and store them in there and then call them
@@ -60,8 +65,11 @@ public class MsgConnection {
         2  Then call a method on this class that creates a consumer or producer into a specific topic or queue which puts it into a map -
         be sure to check first if it already exists. If it does return it if not make it and return it
          */
-
     }
+    public Session getSession(){
+          return this.session;
+    }
+
 
 
 }

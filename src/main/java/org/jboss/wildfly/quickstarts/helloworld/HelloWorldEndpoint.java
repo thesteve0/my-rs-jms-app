@@ -16,7 +16,10 @@
  */
 package org.jboss.wildfly.quickstarts.helloworld;
 
+import org.jboss.wildfly.quickstarts.helloworld.messaging.MsgConnection;
+
 import javax.inject.Inject;
+import javax.jms.*;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -31,14 +34,44 @@ import javax.ws.rs.Produces;
 
 @Path("/")
 public class HelloWorldEndpoint {
+
+    
     @Inject
     HelloService helloService;
+    MsgConnection msgConnection;
 
     @GET
     @Path("/json")
     @Produces({ "application/json" })
     public String getHelloWorldJSON() {
-        return "{\"result\":\"" + helloService.createHelloMessage("World") + "\"}";
+        String msgResult = "";
+        try {
+            Session session  = msgConnection.getSession();
+            // Create the destination
+            Destination destination = session.createTopic("NOTES");
+
+            // Create a MessageProducer from the Session to the Queue
+            MessageProducer producer = session.createProducer(destination);
+            TextMessage message = session.createTextMessage("my messasge");
+            producer.send(message);
+            session.close();
+
+        } catch (JMSException e) {
+            System.out.println("In producer");
+            e.printStackTrace();
+        }
+
+        try {
+            Session session = msgConnection.getSession();
+            Destination destination = session.createTopic("NOTES");
+            MessageConsumer consumer = session.createConsumer(destination);
+            TextMessage message = (TextMessage) consumer.receive();
+            msgResult = message.getText();
+        } catch (JMSException e){
+            System.out.println("In consumer");
+            e.printStackTrace();
+        }
+        return "{\"result\":\" " + msgResult + " to " + helloService.createHelloMessage("World") + "\"}";
     }
 
     @GET
