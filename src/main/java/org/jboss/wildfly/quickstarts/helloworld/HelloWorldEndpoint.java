@@ -56,7 +56,7 @@ public class HelloWorldEndpoint {
             MessageProducer producer = session.createProducer(destination);
             TextMessage message = session.createTextMessage("my messasge");
             producer.send(message);
-            session.close();
+
 
         } catch (JMSException e) {
             System.out.println("In producer");
@@ -69,6 +69,8 @@ public class HelloWorldEndpoint {
             MessageConsumer consumer = session.createConsumer(destination);
             TextMessage message = (TextMessage) consumer.receive();
             msgResult = message.getText();
+            //TODO need to understand session open and closing dynamics
+            session.close();
         } catch (JMSException e){
             System.out.println("In consumer");
             e.printStackTrace();
