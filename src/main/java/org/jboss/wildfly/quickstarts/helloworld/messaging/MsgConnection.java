@@ -36,13 +36,17 @@ public class MsgConnection {
     private String password = System.getenv("AMQ_PASSWORD");
     private Session session = null;
 
+
+    /* seems like singleton's don't inject this way
+
     public MsgConnection getInstance() {
         return this;
     }
+    */
 
 
 
-    private MsgConnection() {
+    public MsgConnection() {
 
         try {
             // Create a ConnectionFactory
