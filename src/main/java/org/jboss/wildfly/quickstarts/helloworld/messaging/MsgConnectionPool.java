@@ -27,20 +27,6 @@ public class MsgConnectionPool {
 
     private Connection connection = null;
 
-
-    /* seems like singleton's don't inject this way
-
-    public MsgConnectionPool getInstance() {
-        return this;
-    }
-
-
-    THe new pattern is this just gives a connection
-    Then we inject it into a class for each topic and that has the send message
-    the jax-rs just injects the topicCLass
-
-    */
-
     public MsgConnectionPool(){
         super();
     }
@@ -70,16 +56,7 @@ public class MsgConnectionPool {
         } catch (JMSException e) {
             e.printStackTrace();
         }
-        /*
-        TODO according to this page - http://activemq.apache.org/how-do-i-use-jms-efficiently.html I should resuse message
-        producers and consumers. How do I do that effectively here. Do I make a Map and store them in there and then call them
-        out of the map when needed.
-
-        usage would be like:
-        1. Inject this class
-        2  Then call a method on this class that creates a consumer or producer into a specific topic or queue which puts it into a map -
-        be sure to check first if it already exists. If it does return it if not make it and return it
-         */
+    
     }
    
     public Connection getConnection() {

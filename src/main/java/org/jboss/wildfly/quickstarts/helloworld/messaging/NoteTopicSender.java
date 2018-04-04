@@ -20,7 +20,7 @@ public class NoteTopicSender {
         try {
             Connection connection = msgConnectionPool.getConnection();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createTopic("NOTES");
+            Destination destination = session.createTopic("NAME");
             producer = session.createProducer(destination);
             connection.start();
         } catch (JMSException e){

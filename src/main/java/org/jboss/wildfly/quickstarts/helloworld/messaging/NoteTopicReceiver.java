@@ -13,14 +13,18 @@ public class NoteTopicReceiver {
 
     private MessageConsumer consumer;
 
-
-
     @PostConstruct
     public void afterConstruct(){
         try {
             Connection connection = msgConnectionPool.getConnection();
+
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            Topic topic = session.createTopic("NOTES");
+            Topic topic = session.createTopic("NAME");
+
+            //This is required by the durable connection
+            //http://activemq.apache.org/how-do-durable-queues-and-topics-work.html
+            connection.setClientID("NoteTopicReciver");
+            
             //If this was JMS 2.0 looks like we could have used SharedDurableConsumer
             //https://docs.oracle.com/javaee/7/api/javax/jms/Session.html#createSharedDurableConsumer-javax.jms.Topic-java.lang.String-
             consumer = session.createDurableSubscriber(topic, "notShared");
