@@ -1,24 +1,15 @@
 package org.jboss.wildfly.quickstarts.helloworld.messaging;
 
-
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.jms.Connection;
 import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.ws.rs.POST;
 
 
-/*
-Username and password
-    "name": "AMQ_USER""
-    "name": "AMQ_PASSWORD"
-    BROKER_AMQ_TCP_PORT
-
- */
 
 /*
 Topics are for pub/sub, queues are for point to point
@@ -31,22 +22,38 @@ TODO then hook it up to the JAX-RS server
  */
 
 @ApplicationScoped
-public class MsgConnection {
+public class MsgConnectionPool {
     private ActiveMQConnectionFactory connectionFactory = null;
 
-    private Session session = null;
     private Connection connection = null;
 
 
     /* seems like singleton's don't inject this way
 
-    public MsgConnection getInstance() {
+    public MsgConnectionPool getInstance() {
         return this;
     }
+
+
+    THe new pattern is this just gives a connection
+    Then we inject it into a class for each topic and that has the send message
+    the jax-rs just injects the topicCLass
+
     */
 
-    public MsgConnection(){
+    public MsgConnectionPool(){
         super();
+    }
+
+    @PreDestroy
+    public void timeToShutdown(){
+
+        try {
+            connection.close();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @PostConstruct
@@ -59,8 +66,6 @@ public class MsgConnection {
             connectionFactory = new ActiveMQConnectionFactory(username, password, uri);
             // Create a Connection
             connection = connectionFactory.createConnection();
-            // Create a Session
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         } catch (JMSException e) {
             e.printStackTrace();
@@ -76,10 +81,7 @@ public class MsgConnection {
         be sure to check first if it already exists. If it does return it if not make it and return it
          */
     }
-    public Session getSession(){
-          return this.session;
-    }
-
+   
     public Connection getConnection() {
         return connection;
     }

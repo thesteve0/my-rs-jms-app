@@ -16,10 +16,10 @@
  */
 package org.jboss.wildfly.quickstarts.helloworld;
 
-import org.jboss.wildfly.quickstarts.helloworld.messaging.MsgConnection;
+import org.jboss.wildfly.quickstarts.helloworld.messaging.NoteTopicReceiver;
+import org.jboss.wildfly.quickstarts.helloworld.messaging.NoteTopicSender;
 
 import javax.inject.Inject;
-import javax.jms.*;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -38,60 +38,21 @@ public class HelloWorldEndpoint {
     
     @Inject
     HelloService helloService;
-
     @Inject
-    MsgConnection msgConnection;
+    NoteTopicReceiver noteTopicReceiver;
+    @Inject
+    NoteTopicSender noteTopicSender;
+
+
 
     @GET
     @Path("/json")
     @Produces({ "application/json" })
     public String getHelloWorldJSON() {
-        String msgResult = "";
-        try {
-            Session session  = msgConnection.getSession();
-            Connection connection = msgConnection.getConnection();
-
-            // Create the destination
-            Destination destination = session.createTopic("NOTES");
-
-            // Create a MessageProducer from the Session to the Queue
-            MessageProducer producer = session.createProducer(destination);
-
-            TextMessage message = session.createTextMessage("my messasge");
-            producer.send(message);
-            connection.stop();
-            System.out.println("Sent the message");
-
-
-        } catch (JMSException e) {
-            System.out.println("In producer");
-            e.printStackTrace();
-        }
-
-        try {
-            Session session = msgConnection.getSession();
-            Connection connection = msgConnection.getConnection();
-            connection.start();
-            Destination destination = session.createTopic("NOTES");
-            MessageConsumer consumer = session.createConsumer(destination);
-
-            TextMessage message = (TextMessage) consumer.receive();
-            msgResult = message.getText();
-            connection.stop();
-            //TODO need to understand session open and closing dynamics
-            session.close();
-        } catch (JMSException e){
-            System.out.println("In consumer");
-            e.printStackTrace();
-        }
-        return "{\"result\":\" " + msgResult + " to " + helloService.createHelloMessage("World") + "\"}";
+        noteTopicSender.sendTextMessage("Steve");
+        String person = noteTopicReceiver.receiveTextMessage();
+        return "{\"result\":\" " + person + " says " + helloService.createHelloMessage("World") + "\"}";
     }
 
-    @GET
-    @Path("/xml")
-    @Produces({ "application/xml" })
-    public String getHelloWorldXML() {
-        return "<xml><result>" + helloService.createHelloMessage("World") + "</result></xml>";
-    }
 
 }
