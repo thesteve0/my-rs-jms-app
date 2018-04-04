@@ -23,6 +23,7 @@ public class NoteTopicReceiver {
 
             //This is required by the durable connection
             //http://activemq.apache.org/how-do-durable-queues-and-topics-work.html
+            //We want a durable connection so we can receive messages even when we are not around
             connection.setClientID("NoteTopicReciver");
             
             //If this was JMS 2.0 looks like we could have used SharedDurableConsumer

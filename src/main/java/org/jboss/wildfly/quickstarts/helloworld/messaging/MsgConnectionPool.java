@@ -50,17 +50,24 @@ public class MsgConnectionPool {
         try {
             // Create a ConnectionFactory
             connectionFactory = new ActiveMQConnectionFactory(username, password, uri);
-            // Create a Connection
-            connection = connectionFactory.createConnection();
+            //TODO find out if it is legal to create a connection per Object
+            //connection = connectionFactory.createConnection();
 
-        } catch (JMSException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     
     }
    
     public Connection getConnection() {
-        return connection;
+        Connection newConnection = null;
+        try {
+            newConnection = connectionFactory.createConnection();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
+        return newConnection;
     }
 }
 
