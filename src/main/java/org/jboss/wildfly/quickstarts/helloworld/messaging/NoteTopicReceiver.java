@@ -53,11 +53,10 @@ public class NoteTopicReceiver {
     public String receiveTextMessage(){
         String message = "failed";
         try {
-            System.out.println("About to receive the message");
+
             TextMessage txtMessage = (TextMessage) consumer.receive();
-            System.out.println("got the actual message");
             message = txtMessage.getText();
-            System.out.println("Got the text from the message");
+
         } catch (JMSException e) {
             System.out.println("Threw this in ReceiveTextMessage " + e.getCause() + " :: " + e.getMessage());
         }

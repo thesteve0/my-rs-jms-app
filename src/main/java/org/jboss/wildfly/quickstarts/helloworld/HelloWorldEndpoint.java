@@ -22,6 +22,7 @@ import org.jboss.wildfly.quickstarts.helloworld.messaging.NoteTopicSender;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
@@ -50,6 +51,15 @@ public class HelloWorldEndpoint {
     @Produces({ "application/json" })
     public String getHelloWorldJSON() {
         noteTopicSender.sendTextMessage("Steve");
+        String person = noteTopicReceiver.receiveTextMessage();
+        return "{\"result\":\" " + person + " says " + helloService.createHelloMessage("World") + "\"}";
+    }
+
+    @GET
+    @Path("/json/{name}")
+    @Produces({ "application/json" })
+    public String getHelloNameJSON(@PathParam("name") String name) {
+        noteTopicSender.sendTextMessage(name);
         String person = noteTopicReceiver.receiveTextMessage();
         return "{\"result\":\" " + person + " says " + helloService.createHelloMessage("World") + "\"}";
     }
