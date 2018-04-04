@@ -1,6 +1,8 @@
 package org.jboss.wildfly.quickstarts.helloworld.messaging;
 
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,7 +22,7 @@ public class NoteTopicReceiver {
             //This is required by the durable connection
             //http://activemq.apache.org/how-do-durable-queues-and-topics-work.html
             //We want a durable connection so we can receive messages even when we are not around
-            connection.setClientID("NoteTopicReciver");
+            connection.setClientID("NoteTopicReceiver");
 
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Topic topic = session.createTopic("NAME");
@@ -39,8 +41,9 @@ public class NoteTopicReceiver {
         String message = "failed";
         try {
             TextMessage txtMessage = (TextMessage) consumer.receive();
+            System.out.printf("got the actual message");
             message = txtMessage.getText();
-
+            System.out.println("Got the text from the message");
         } catch (JMSException e) {
             System.out.println("Threw this in ReceiveTextMessage " + e.getCause() + " :: " + e.getMessage());
         }

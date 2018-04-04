@@ -33,8 +33,8 @@ public class NoteTopicSender {
         boolean isSuccessful = false;
 
         try {
-            Message txtmMessage =  session.createTextMessage(message);
-            producer.send(txtmMessage);
+            Message textMessage =  session.createTextMessage(message);
+            producer.send(textMessage);
             isSuccessful = true;
         } catch (JMSException e){
             System.out.println("Threw this in sendTextMessage " + e.getCause() + " :: " + e.getMessage());
