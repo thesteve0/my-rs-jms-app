@@ -1,13 +1,19 @@
 The purpose of this project is to create a simple hello world type application that container Jax-RS,
 CDI, and JMS that works with Wildfly on OpenShift. I try to keep this "relatively" up to date but 
-I certainly make no guarantees. This is aimed at Wildfly XXX which is Java EE XXXX
+I certainly make no guarantees. This is aimed at Wildfly 11 which is Java EE 7.
+
+Please remember this example is just to highlight:
+1. How to create a connection pool using CDI
+2. How to send and receive a message on a topic
+
+In a typical scenario, when using an appserver, you would probably let the appserver handle the connection pool and you would connect using JNDI. You would also not put the sender and receiver in the same JAX-RS endpoint. 
 
 In this example the ActiveMQ Messaging Service is assumed to be running outside the Wildfly server as a 
 standalone broker. We also assume you are going to use an environment variables to specify the 
 broker URI and username and password for the JMS ActiveMQConnectionFactory 
 
 The original sample is broken out from the Wildfly Quickstarts which are found here:
-https://github.com/wildfly/quickstart/. Original README is below.
+https://github.com/wildfly/quickstart/. **Original README is below.**
 
 
 helloworld-rs: Helloworld Using JAX-RS (Java API for RESTful Web Services)
