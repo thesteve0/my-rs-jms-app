@@ -9,17 +9,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 
-
-
-/*
-Topics are for pub/sub, queues are for point to point
-
-TODO make sure we get maven to import the clients we need
-TODO make sure we get this as the right class to inject
-TODO then create a message and send to the topic - make sure we do pub sub
-TODO then make the class that receives it and adds "from messaging" to the message
-TODO then hook it up to the JAX-RS server
+/**
+ * BY making this class application scoped the "container" holds one of these objects in scope for the life of
+ * the application. This allows one creation of the factory which we can keep reusing to give us different connections
+ * as needed.
  */
+
 
 @ApplicationScoped
 public class MsgConnectionPool {
@@ -50,8 +45,6 @@ public class MsgConnectionPool {
         try {
             // Create a ConnectionFactory
             connectionFactory = new ActiveMQConnectionFactory(username, password, uri);
-            //TODO find out if it is legal to create a connection per Object
-            //connection = connectionFactory.createConnection();
 
         } catch (Exception e) {
             e.printStackTrace();
